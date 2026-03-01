@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const stats = [
   { value: "5", label: "Core Members" },
@@ -8,10 +9,91 @@ const stats = [
 ];
 
 const HeroSection = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+    const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Create particles
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.3 + 0.05,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fill();
+      });
+
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsla(82,85%,60%,0.04)_0%,_transparent_70%)]" />
+      {/* Canvas particles */}
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+
+      {/* Grid overlay */}
+      <div className="absolute inset-0 hero-grid z-0" />
+
+      {/* Radial glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsla(82,85%,60%,0.06)_0%,_transparent_60%)] z-0" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,_hsla(82,85%,60%,0.04)_0%,_transparent_70%)] rounded-full blur-3xl z-0" />
 
       <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
         <motion.p
@@ -71,7 +153,7 @@ const HeroSection = () => {
           </a>
           <a
             href="#partner-with-us"
-            className="px-8 py-3 glass-card glass-card-hover font-heading font-semibold text-sm tracking-wide text-foreground transition-all duration-300"
+            className="px-8 py-3 glass-card-premium font-heading font-semibold text-sm tracking-wide text-foreground"
           >
             Partner With LYNX
           </a>
@@ -81,7 +163,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3 }}
-          className="glass-card light-reflection rounded-sm max-w-3xl mx-auto"
+          className="glass-card-premium light-reflection rounded-sm max-w-3xl mx-auto"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
             {stats.map((stat) => (

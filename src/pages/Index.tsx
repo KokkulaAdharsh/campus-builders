@@ -6,6 +6,7 @@ import VisionStatement from "@/components/VisionStatement";
 import ProgramsSection from "@/components/ProgramsSection";
 import LearningModel from "@/components/LearningModel";
 import WhyLynx from "@/components/WhyLynx";
+import TeamSection from "@/components/TeamSection";
 import RoadmapSection from "@/components/RoadmapSection";
 import CTASection from "@/components/CTASection";
 import LynxFooter from "@/components/LynxFooter";
@@ -21,6 +22,7 @@ const Index = () => {
       <ProgramsSection />
       <LearningModel />
       <WhyLynx />
+      <TeamSection />
       <RoadmapSection />
       <CTASection />
       <LynxFooter />

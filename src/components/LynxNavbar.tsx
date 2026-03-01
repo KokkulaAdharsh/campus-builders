@@ -1,21 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-const navLinks = ["Home", "Programs", "Approach", "Roadmap", "Partner With Us"];
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "Programs", href: "#programs" },
+  { label: "Approach", href: "#approach" },
+  { label: "Roadmap", href: "#roadmap" },
+  { label: "Partner With Us", href: "#partner-with-us" },
+];
 
 const LynxNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+
+      const sections = navLinks.map((l) => l.href.slice(1));
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 120) {
+            setActiveSection(sections[i]);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 glass-nav"
+      className={`fixed top-0 left-0 right-0 z-50 glass-nav ${scrolled ? "border-b border-border" : ""}`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="font-heading text-2xl font-bold tracking-widest text-foreground">
+        <a href="#home" className="font-heading text-2xl font-bold tracking-widest text-foreground">
           LYNX
         </a>
 
@@ -23,11 +52,22 @@ const LynxNavbar = () => {
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-sm text-subtle hover:text-foreground transition-colors duration-300 tracking-wide"
+              key={link.label}
+              href={link.href}
+              className={`text-sm tracking-wide transition-colors duration-300 relative ${
+                activeSection === link.href.slice(1)
+                  ? "text-foreground"
+                  : "text-subtle hover:text-foreground"
+              }`}
             >
-              {link}
+              {link.label}
+              {activeSection === link.href.slice(1) && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1 left-0 right-0 h-px bg-accent"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
             </a>
           ))}
         </div>
@@ -53,12 +93,16 @@ const LynxNavbar = () => {
             <div className="px-6 py-4 flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
-                  key={link}
-                  href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
+                  key={link.label}
+                  href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm text-subtle hover:text-foreground transition-colors"
+                  className={`text-sm transition-colors ${
+                    activeSection === link.href.slice(1)
+                      ? "text-accent"
+                      : "text-subtle hover:text-foreground"
+                  }`}
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
             </div>

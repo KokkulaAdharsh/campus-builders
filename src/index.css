@@ -155,7 +155,8 @@
   }
 
   .team-scroll {
-    animation: team-ticker 25s linear infinite;
+    animation: team-ticker 30s linear infinite;
+    will-change: transform;
   }
 
   @keyframes team-ticker {

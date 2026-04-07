@@ -4,8 +4,15 @@ import meghamshImg from "@/assets/meghamsh.png";
 import rakeshImg from "@/assets/rakesh.png";
 import rohiniImg from "@/assets/rohini.png";
 import saiTejaImg from "@/assets/sai_teja.jpeg";
+import adharshImg from "@/assets/adharsh.png";
 
 const teamMembers = [
+  {
+    name: "Adharsh",
+    image: adharshImg,
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
   {
     name: "Meghamsh",
     image: meghamshImg,
@@ -27,12 +34,6 @@ const teamMembers = [
   {
     name: "Sai Teja",
     image: saiTejaImg,
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
-  },
-  {
-    name: "Adharsh",
-    image: "https://api.dicebear.com/9.x/glass/svg?seed=Adharsh",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
   },

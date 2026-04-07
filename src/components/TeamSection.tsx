@@ -4,70 +4,68 @@ import { Linkedin, Github } from "lucide-react";
 const teamMembers = [
   {
     name: "Adharsh",
-    role: "Founder & AI Lead",
-    image: "https://api.dicebear.com/9.x/notionists/svg?seed=Adharsh&backgroundColor=transparent",
+    image: "https://api.dicebear.com/9.x/glass/svg?seed=Adharsh",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
   },
   {
     name: "Member 2",
-    role: "Full-Stack Developer",
-    image: "https://api.dicebear.com/9.x/notionists/svg?seed=Member2&backgroundColor=transparent",
+    image: "https://api.dicebear.com/9.x/glass/svg?seed=Member2",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
   },
   {
     name: "Member 3",
-    role: "Community Lead",
-    image: "https://api.dicebear.com/9.x/notionists/svg?seed=Member3&backgroundColor=transparent",
+    image: "https://api.dicebear.com/9.x/glass/svg?seed=Member3",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
   },
 ];
 
 const TeamCard = ({ member }: { member: (typeof teamMembers)[0] }) => (
-  <div className="glass-card-premium light-reflection rounded-sm p-8 w-[260px] shrink-0 mx-3 group flex flex-col items-center text-center">
-    {/* Circular profile photo */}
-    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-border group-hover:border-accent/40 transition-colors duration-500 mb-5 bg-secondary">
+  <div className="glass-card-premium light-reflection rounded-sm w-[220px] shrink-0 mx-3 group flex flex-col items-center text-center overflow-hidden">
+    {/* Square image with noir vignette */}
+    <div className="w-full aspect-square overflow-hidden relative">
       <img
         src={member.image}
         alt={member.name}
-        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110"
         loading="lazy"
       />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
     </div>
 
-    <h3 className="font-heading text-base font-bold text-foreground mb-1">
-      {member.name}
-    </h3>
-    <p className="text-subtle text-xs mb-4">{member.role}</p>
+    <div className="p-5 w-full">
+      <h3 className="font-heading text-base font-bold text-foreground mb-3">
+        {member.name}
+      </h3>
 
-    {/* Social icons */}
-    <div className="flex gap-3">
-      <a
-        href={member.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-8 h-8 rounded-sm border border-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-colors duration-300"
-        aria-label={`${member.name} LinkedIn`}
-      >
-        <Linkedin size={14} />
-      </a>
-      <a
-        href={member.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-8 h-8 rounded-sm border border-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-colors duration-300"
-        aria-label={`${member.name} GitHub`}
-      >
-        <Github size={14} />
-      </a>
+      {/* Social icons */}
+      <div className="flex justify-center gap-3">
+        <a
+          href={member.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-8 h-8 rounded-sm border border-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-colors duration-300"
+          aria-label={`${member.name} LinkedIn`}
+        >
+          <Linkedin size={14} />
+        </a>
+        <a
+          href={member.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-8 h-8 rounded-sm border border-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-colors duration-300"
+          aria-label={`${member.name} GitHub`}
+        >
+          <Github size={14} />
+        </a>
+      </div>
     </div>
   </div>
 );
 
 const TeamSection = () => {
-  // Triple the array for seamless infinite scroll
   const scrollItems = [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
 
   return (
@@ -99,7 +97,6 @@ const TeamSection = () => {
         </motion.p>
       </div>
 
-      {/* Infinite scroll */}
       <div className="relative">
         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />

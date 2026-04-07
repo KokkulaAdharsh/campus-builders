@@ -1,22 +1,38 @@
 import { motion } from "framer-motion";
 import { Linkedin, Github } from "lucide-react";
+import meghamshImg from "@/assets/meghamsh.png";
+import rakeshImg from "@/assets/rakesh.png";
+import rohiniImg from "@/assets/rohini.png";
+import saiTejaImg from "@/assets/sai_teja.jpeg";
 
 const teamMembers = [
   {
+    name: "Meghamsh",
+    image: meghamshImg,
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    name: "Rakesh",
+    image: rakeshImg,
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    name: "Rohini",
+    image: rohiniImg,
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    name: "Sai Teja",
+    image: saiTejaImg,
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
     name: "Adharsh",
     image: "https://api.dicebear.com/9.x/glass/svg?seed=Adharsh",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
-  },
-  {
-    name: "Member 2",
-    image: "https://api.dicebear.com/9.x/glass/svg?seed=Member2",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
-  },
-  {
-    name: "Member 3",
-    image: "https://api.dicebear.com/9.x/glass/svg?seed=Member3",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
   },
@@ -24,7 +40,6 @@ const teamMembers = [
 
 const TeamCard = ({ member }: { member: (typeof teamMembers)[0] }) => (
   <div className="glass-card-premium light-reflection rounded-sm w-[220px] shrink-0 mx-3 group flex flex-col items-center text-center overflow-hidden">
-    {/* Square image with noir vignette */}
     <div className="w-full aspect-square overflow-hidden relative">
       <img
         src={member.image}
@@ -40,7 +55,6 @@ const TeamCard = ({ member }: { member: (typeof teamMembers)[0] }) => (
         {member.name}
       </h3>
 
-      {/* Social icons */}
       <div className="flex justify-center gap-3">
         <a
           href={member.linkedin}

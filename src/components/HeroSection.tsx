@@ -111,7 +111,7 @@ const HeroSection = () => {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="font-heading text-7xl md:text-9xl font-bold tracking-[0.15em] mb-6 text-foreground"
         >
-          LYNX
+          <img src="/finalLOGO4.png" alt="LYNX" className="inline-block h-32" />
         </motion.h1>
 
         <motion.div
@@ -134,8 +134,8 @@ const HeroSection = () => {
           transition={{ delay: 0.9 }}
           className="text-subtle max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-10"
         >
-          A team of five hackathon winners, club leaders, and AI practitioners
-          transforming local colleges into innovation-powered campuses — one
+          A team of five hackathon winners, club leaders and AI practitioners
+          transforming local colleges into innovation-powered campuses, one
           workshop, one hackathon, one student at a time.
         </motion.p>
 

@@ -111,7 +111,7 @@ const HeroSection = () => {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="font-heading text-7xl md:text-9xl font-bold tracking-[0.15em] mb-6 text-foreground"
         >
-          <img src="/finalLOGO4.png" alt="LYNX" className="inline-block h-32" />
+          <img src="/finalLOGO4.png" alt="LYNX" className="inline-block h-16 sm:h-24 md:h-32 max-w-full" />
         </motion.h1>
 
         <motion.div

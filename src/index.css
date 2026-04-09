@@ -171,4 +171,14 @@
       linear-gradient(90deg, hsla(0, 0%, 100%, 0.03) 1px, transparent 1px);
     background-size: 60px 60px;
   }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Linkedin, Github } from "lucide-react";
+import { Linkedin, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 import meghamshImg from "@/assets/meghamsh.png";
 import rakeshImg from "@/assets/rakesh.png";
 import rohiniImg from "@/assets/rohini.png";
@@ -40,7 +41,7 @@ const teamMembers = [
 ];
 
 const TeamCard = ({ member }: { member: (typeof teamMembers)[0] }) => (
-  <div className="glass-card-premium light-reflection rounded-sm w-[220px] shrink-0 mx-3 group flex flex-col items-center text-center overflow-hidden">
+  <div className="glass-card-premium light-reflection rounded-sm w-[220px] md:w-[240px] shrink-0 group flex flex-col items-center text-center overflow-hidden">
     <div className="w-full aspect-square overflow-hidden relative">
       <img
         src={member.image}
@@ -81,7 +82,72 @@ const TeamCard = ({ member }: { member: (typeof teamMembers)[0] }) => (
 );
 
 const TeamSection = () => {
-  const scrollItems = [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    setIsUserInteracting(true);
+    if (scrollContainerRef.current) {
+      const scrollAmount = 236;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+    if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    autoPlayTimerRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const cardWidth = 236;
+    const singleSetWidth = cardWidth * teamMembers.length;
+    container.scrollLeft = singleSetWidth;
+
+    const startAutoScroll = () => {
+      if (autoScrollIntervalRef.current) clearInterval(autoScrollIntervalRef.current);
+      
+      autoScrollIntervalRef.current = setInterval(() => {
+        if (!isUserInteracting && container) {
+          container.scrollBy({
+            left: cardWidth,
+            behavior: 'smooth'
+          });
+        }
+      }, 3000);
+    };
+
+    const handleScroll = () => {
+      if (container.scrollLeft >= singleSetWidth * 2 - 10) {
+        container.scrollLeft = singleSetWidth;
+      } else if (container.scrollLeft <= 10) {
+        container.scrollLeft = singleSetWidth;
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    startAutoScroll();
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      if (autoScrollIntervalRef.current) clearInterval(autoScrollIntervalRef.current);
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    };
+  }, [isUserInteracting]);
+
+  const handleUserScroll = () => {
+    setIsUserInteracting(true);
+    if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    autoPlayTimerRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 5000);
+  };
 
   return (
     <section className="py-24 overflow-hidden">
@@ -113,12 +179,50 @@ const TeamSection = () => {
       </div>
 
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
-        <div className="team-scroll flex whitespace-nowrap py-2">
-          {scrollItems.map((member, i) => (
-            <TeamCard key={`${member.name}-${i}`} member={member} />
-          ))}
+        {/* Desktop: Auto-scroll animation */}
+        <div className="hidden md:block">
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
+          <div className="team-scroll flex whitespace-nowrap py-2 gap-6">
+            {[...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers].map((member, i) => (
+              <TeamCard key={`${member.name}-${i}`} member={member} />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: Infinite loop carousel */}
+        <div className="md:hidden relative px-6">
+          <div 
+            ref={scrollContainerRef}
+            onTouchStart={() => setIsUserInteracting(true)}
+            onTouchEnd={handleUserScroll}
+            onMouseDown={() => setIsUserInteracting(true)}
+            onMouseUp={handleUserScroll}
+            className="flex overflow-x-auto gap-4 scrollbar-hide pb-2"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none'
+            }}
+          >
+            {[...teamMembers, ...teamMembers, ...teamMembers].map((member, i) => (
+              <TeamCard key={`${member.name}-${i}`} member={member} />
+            ))}
+          </div>
+
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full glass-card-premium flex items-center justify-center text-foreground hover:text-accent transition-colors"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full glass-card-premium flex items-center justify-center text-foreground hover:text-accent transition-colors"
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import lynxLogo from "@/assets/lynx-logo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -44,8 +45,8 @@ const LynxNavbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 glass-nav ${scrolled ? "border-b border-border" : ""}`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#home" className="font-heading text-2xl font-bold tracking-widest text-foreground">
-          LYNX
+        <a href="#home" className="flex items-center gap-2">
+          <img src={lynxLogo} alt="LYNX Logo" className="h-8 w-auto" />
         </a>
 
         {/* Desktop */}
